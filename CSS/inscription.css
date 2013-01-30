@@ -1,0 +1,11 @@
+fieldset
+{
+	background: #002224;
+}
+
+.erreur-pseudo, .erreur-age, .erreur-email,.erreur-passe,.erreur-confirme
+{
+	padding-left: 19px;
+	padding-bottom: 5px;
+	display:none;
+}

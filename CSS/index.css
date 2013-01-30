@@ -1,0 +1,257 @@
+/****************
+*****************
+*****************
+***** Corps *****
+*****************
+*****************
+*****************/
+
+body
+{
+	background-color: black;
+	color: white;
+}
+
+/****************
+*****************
+*****************
+** Page du site *
+*****************
+*****************
+*****************/
+
+#page
+{
+	width: 1200px;
+	margin:auto;
+}
+
+/****************
+*****************
+*****************
+***** Header ****
+*****************
+*****************
+*****************/
+
+header {height: 150px;}
+
+/****************
+*****************
+*****************
+**** Article ****
+*****************
+*****************
+*****************/
+
+article
+{
+	border: 1px solid gray;
+	padding: 5px;
+	margin-top:10px;
+	background: #001016;
+}
+
+p.bon
+{
+	color: green;
+	display: inline-block;
+	border: 1px solid gray;
+	background:white;
+	border-radius: 10px;
+	padding:3px;
+	margin-top:-20px;
+}
+
+p.erreur
+{
+	color: red;
+	display:inline-block;
+	border: 1px solid gray;
+	background:white;
+	border-radius: 10px;
+	padding:3px;
+	margin-top:-20px;
+}
+
+article a
+{
+	color: green;
+	text-decoration: none;
+}
+
+article a:hover
+{
+	color: gray;
+	text-decoration:underline;
+}
+
+p.text_center{text-align:center;}
+
+td.text-center{text-align:center;}
+
+td.lus_sujet{width: 7%; text-align:center;}
+
+th.auteur_sujet{width:15%;text-align:center;}
+td.message_sujet{vertical-align:top;}
+h1.titre_reponse{padding:5px;}
+/****************
+*****************
+*****************
+* fils d'ariane *
+*****************
+*****************
+*****************/
+
+p.ariane
+{
+	font-size: 12px;
+	display: inline-block;
+}
+
+.ariane a
+{
+	color: green;
+	text-decoration:none;
+}
+
+.ariane a:hover
+{
+	color: gray;
+	text-decoration:underline;
+}
+
+/****************
+*****************
+*****************
+***** Index *****
+*****************
+*****************
+*****************/
+
+table#index
+{
+	margin:auto;
+	width: 90%;
+	border-collapse: collapse;
+	margin-bottom:10px;
+}
+
+/*bordure et couleur du tableau*/
+#index tr, #index td
+{
+	border: 1px solid white;
+	background: #002224;
+}
+
+/*largeur du champ auteur*/
+#index .index_auteur{width: 5px;}
+
+/*titre des categorie*/
+#index a.index_titre
+{
+	color: green;
+	font-size: 20px;
+}
+
+/*sous titre des categories*/
+#index .index_sousTitre
+{
+	font-style: italic;
+	color: gray;
+}
+
+/*marge de 5px dans le tableau*/
+#index td { padding: 5px; }
+
+/*taille du champ dernier message*/
+.index_dernierMessage { width:20%; }
+
+/*alignement du texte pour le champ dernier message*/
+.index_message { text-align:center;font-size: 12px;}
+
+/*taille des chanp lus,sujet et reponse*/
+.index_lus { width: 5%; }
+
+.index_sujet{width:5%;}
+
+.index_reponse{width:5%;}
+
+/****************
+*****************
+*****************
+*** Navigation **
+*****************
+*****************
+*****************/
+
+/*centrer le texte*/
+nav{text-align:center;}
+
+/*type de lyste*/
+nav li
+{
+	display: inline-block;
+	padding:5px;	
+}
+
+nav a 
+{
+	color: white;
+	text-decoration: none;
+	padding: 5px;
+}
+
+nav a:hover
+{
+	background-color: green;
+	border: 1px solid gray;
+	padding:5px;
+}
+
+/****************
+*****************
+*****************
+*** Pagination **
+*****************
+*****************
+*****************/	
+
+.pagination{
+	border: 1px solid gray;
+	background-color: white;
+	color: black;
+	width: 20px;
+	text-align: center;
+	display: inline-block;
+}
+.pagination:hover{
+	background: gray;
+	border: 1px solid white;
+}
+.pagination a
+{
+	color: black;
+}
+
+.pagination a:hover
+{
+	background-color: gray;
+}
+
+/****************
+*****************
+*****************
+*** Reponse *****
+*****************
+*****************
+*****************/	
+
+#vue
+{
+	width: 95%;
+	height: 200px;
+	border: 1px solid gray;
+	margin: auto;
+	padding: 5px;
+}

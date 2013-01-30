@@ -1,0 +1,56 @@
+#admin
+{
+	display: inline-block;
+	border: 2px outset gray;
+	min-width: 210px;
+	min-height: 85px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	float: left;
+	background-color: #000e07;
+}
+
+#admin:hover
+{
+	background: #001a07;
+}
+
+#admin h2
+{
+	text-align:center;
+	margin-top: -0px;
+	margin-bottom: 2px;
+	background: #001a15;
+}
+
+
+.case
+{
+	display: inline-block;
+	width: 200px;
+	padding: 5px;
+}
+
+.case a {color: white;}
+
+.case a:hover{color:black;}
+
+.case:hover
+{
+	border-right-color:white;	
+	background-color: #94a791;
+}
+
+#admin hr
+{
+	color: gray;
+	background-color: gray;
+	height: 1px;
+	margin-top:-1px;
+	margin-bottom:-1px;
+	border: 0;
+}
+
+a.admin_lien{color : white;}
+
+a.admin_lien:hover{color : white;}

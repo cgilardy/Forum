@@ -1,0 +1,28 @@
+table.structure
+{
+	margin:auto;
+	width:60%;
+	margin-bottom:10px;
+	background:#002224;
+	border-collapse:collapse;
+}
+
+
+.structure tr,.structure td,.structure th{border: 1px solid gray;}
+
+.liste_categorie td{padding: 5px;}
+
+th.action_liste_cat{width: 20%;}
+
+#ajoutCategorie{margin-bottom:10px;}
+#sousCategorie{margin-bottom:10px;}
+
+td.titre_cat{
+color: red;
+padding:5px;
+font-size: 20px;
+}
+
+.center_structure{text-align:center;}
+
+td.titre_souscat{padding:5px;}
