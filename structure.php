@@ -7,7 +7,7 @@ echo '
 <section>
 	<article>';
 		
-		if(isset($_SESSION['rang']) and $_SESSION['rang'] == 1){
+		if(isset($_SESSION['rang']) and $_SESSION['rang'] <= 1){
 			echo'<p class="ariane">> <a href="index.php">Forum</a> > <a href="administration.php">Administration</a> > Structure du forum</p><br>';
 			echo '<h1>Structure du forum</h1>';
 			echo'<a class="ajouter" href="structure.php?ajoutCategorie=ok">Ajouter une catégorie</a> | <a href="structure.php?ajoutSousCat=ok">Ajouter une sous-catégorie</a><br><br>';
@@ -21,7 +21,7 @@ echo '
 				****** et de sa categorie associée ****/
 				
 				$requete = $bdd->prepare("SELECT * FROM forum_souscategories FS JOIN forum_categories FC ON FS.id_categorie = FC.id_categorie WHERE FS.id_souscategorie = :souscat ");
-				$requete->execute(array('souscat'=>$_GET['monter']));
+				$requete->execute(array('souscat'=>intval($_GET['monter'])));
 				$donnees = $requete->fetch();
 				$requete->closeCursor();
 				
@@ -34,7 +34,7 @@ echo '
 				
 				//Si la sous categorie est dans la premiere categorie et qu'elle est à la place 1, on ne la bouge pas
 				if(($donnees['place'] == 1) and ($donnees['id_categorie'] == $min['nb'])){
-					echo '<p class="erreur">Vous ne pouvez pas monter la sous-catégorie <em>'.$donnees['titre_souscat'].'</em> !</p>';
+					echo '<p class="erreur">Vous ne pouvez pas monter la sous-catégorie <em>'.htmlspecialchars($donnees['titre_souscat']).'</em> !</p>';
 				}
 				// si sa place est différente de 1 c'est que l'on peut la bouger
 				else if(($donnees['place'] != 1)){
@@ -74,7 +74,7 @@ echo '
 					$req2->execute(array('place'=>$derniere, 'id'=>$reponse['id_souscategorie']));
 					
 					//on affiche le bon déroulement de l'operation !
-					echo '<p class="bon">La sous-catégorie <em>'.$donnees['titre_souscat'].'</em> est bien monté !</p>';
+					echo '<p class="bon">La sous-catégorie <em>'.htmlspecialchars($donnees['titre_souscat']).'</em> est bien monté !</p>';
 				}
 				//changement de categorie !
 				else if(($donnees['place'] == 1) and ($donnees['id_categorie'] != $min['nb'])){
@@ -118,7 +118,7 @@ echo '
 					//On mets à jour la sous-categories
 					
 					$requete = $bdd->prepare("UPDATE forum_souscategories SET id_categorie = :id, place = :place WHERE id_souscategorie = :souscat");
-					$requete->execute(array('id'=>$id_cat, 'place'=>$place, 'souscat'=>$_GET['monter'])) or die ("erreur");
+					$requete->execute(array('id'=>$id_cat, 'place'=>$place, 'souscat'=>intval($_GET['monter']))) or die ("erreur");
 					
 					/************************** Requete **************************
 					***** On selectionne la plus grande place dans l'ancienne ****
@@ -126,7 +126,7 @@ echo '
 					**************************************************************/
 					
 					$reponse = $bdd->prepare("SELECT MAX(place) as numPlace FROM forum_souscategories WHERE id_categorie = :id");
-					$reponse->execute(array('id'=>$idCatConst)) or die ("erreur1");
+					$reponse->execute(array('id'=>intval($idCatConst))) or die ("erreur1");
 					$donnees1 = $reponse->fetch();
 					$place1 = $donnees1['numPlace'];
 					
@@ -134,7 +134,7 @@ echo '
 					
 					//on selectionne les sous-categories de l'acienne categorie
 					$r = $bdd->prepare("SELECT * FROM forum_souscategories WHERE id_categorie = :id");
-					$r->execute(array('id'=>$idCatConst));
+					$r->execute(array('id'=>intval($idCatConst)));
 					//on les comptes
 					$nbSousCat = $r->rowCount();
 					//si il y en a dedans on modifie leur place qui n'est surement plus la bonne
@@ -165,7 +165,7 @@ echo '
 				****** et de sa categorie associée ****/
 				
 				$requete = $bdd->prepare("SELECT * FROM forum_souscategories FS JOIN forum_categories FC ON FS.id_categorie = FC.id_categorie WHERE FS.id_souscategorie = :souscat ");
-				$requete->execute(array('souscat'=>$_GET['descendre']));
+				$requete->execute(array('souscat'=>intval($_GET['descendre'])));
 				$donnees = $requete->fetch();
 				$requete->closeCursor();
 				
@@ -283,7 +283,7 @@ echo '
 					//On mets à jour la sous-categories
 					
 					$requete = $bdd->prepare("UPDATE forum_souscategories SET id_categorie = :id, place = :place WHERE id_souscategorie = :souscat");
-					$requete->execute(array('id'=>$id_cat, 'place'=>$place, 'souscat'=>$_GET['descendre'])) or die ("erreur");
+					$requete->execute(array('id'=>$id_cat, 'place'=>$place, 'souscat'=>intval($_GET['descendre']))) or die ("erreur");
 					//on informe l'admin du bon déroulement !
 					echo '<p class="bon">Le changement de catégorie c\'est bien déroulé !</p>';
 				}
@@ -296,19 +296,19 @@ echo '
 			
 				//suppression des réponses !
 				$req = $bdd->prepare("DELETE FROM forum_reponses WHERE id_sujet IN (SELECT id_sujet FROM forum_sujets FSU JOIN forum_souscategories FSO ON FSU.id_souscat = FSO.id_souscategorie WHERE FSO.id_categorie = :cat )");
-				$req->execute(array('cat'=>$_GET['supprimerCat'])) or die(print_r($req->errorInfo()));
+				$req->execute(array('cat'=>intval($_GET['supprimerCat']))) or die(print_r($req->errorInfo()));
 				$req->closeCursor();
 				//suppression des sujets
 				$req = $bdd->prepare("DELETE FROM forum_sujets WHERE id_souscat IN (SELECT id_souscategorie FROM forum_souscategories WHERE id_categorie = :cat )");
-				$req->execute(array('cat'=>$_GET['supprimerCat'])) or die(print_r($req->errorInfo()));
+				$req->execute(array('cat'=>intval($_GET['supprimerCat']))) or die(print_r($req->errorInfo()));
 				$req->closeCursor();
 				//suppression des sous-categories
 				$requete = $bdd->prepare("DELETE FROM forum_souscategories WHERE id_categorie =:cat");
-				$requete->execute(array('cat'=>$_GET['supprimerCat'])) or die(print_r($requete->errorInfo()));
+				$requete->execute(array('cat'=>intval($_GET['supprimerCat']))) or die(print_r($requete->errorInfo()));
 				$requete->closeCursor();
 				//suppression de la categorie
 				$requete = $bdd->prepare("DELETE FROM forum_categories WHERE id_categorie = :cat");
-				$requete->execute(array('cat'=>$_GET['supprimerCat'])) or die(print_r($requete->errorInfo()));
+				$requete->execute(array('cat'=>intval($_GET['supprimerCat']))) or die(print_r($requete->errorInfo()));
 				$requete->closeCursor();
 				echo '<p class="bon">La catégorie a bien été supprimé ainsi que ses sous-catégories, ses sujets et ses réponse !</p>';
 			}
@@ -319,7 +319,7 @@ echo '
 			
 			if(isset($_GET['modifierCatOk'])){
 				$requete = $bdd->prepare("UPDATE forum_categories SET titre_cat = :titre WHERE id_categorie = :id_cat");
-				$requete->execute(array('titre'=>$_POST['titre'], 'id_cat'=>$_GET['modifierCatOk']))or die(print_r($requete->errorInfo()));
+				$requete->execute(array('titre'=>$_POST['titre'], 'id_cat'=>intval($_GET['modifierCatOk'])))or die(print_r($requete->errorInfo()));
 				$requete->closeCursor();
 				echo '<p class="bon">La catégorie a bien été modifié !</p>';
 			}
@@ -331,7 +331,7 @@ echo '
 				$requete = $bdd->prepare("INSERT INTO forum_categories (titre_cat) VALUES(:titre)");
 				$requete->execute(array('titre'=>$_POST['titre']));
 				$requete->closeCursor();
-				echo'<p class="bon">La catégorie <em>'.$_POST['titre'].' a été bien ajouté !</em></p>';
+				echo'<p class="bon">La catégorie <em>'.htmlspecialchars($_POST['titre']).' a été bien ajouté !</em></p>';
 			}
 			
 			/************ Requete ****************
@@ -339,8 +339,8 @@ echo '
 			**************************************/
 			if(isset($_GET['modifierSousCatOk'])){
 				$requete = $bdd->prepare("UPDATE forum_souscategories SET titre_souscat =:titre, sousTitre_souscat=:soustitre WHERE id_souscategorie =:id");
-				$requete->execute(array('titre'=>$_POST['titre'], 'soustitre'=>$_POST['soustitre'], 'id'=>$_GET['modifierSousCatOk']));
-				echo'<p class="bon">La sous-catégorie <em>'.$_POST['titre'].' a bien été modifié !</em></p>';
+				$requete->execute(array('titre'=>$_POST['titre'], 'soustitre'=>$_POST['soustitre'], 'id'=>intval($_GET['modifierSousCatOk'])));
+				echo'<p class="bon">La sous-catégorie <em>'.htmlspecialchars($_POST['titre']).' a bien été modifié !</em></p>';
 			}
 			
 			/************ Requete ****************
@@ -354,9 +354,9 @@ echo '
 				
 				$place = $donnees['nb']+1;
 				
-				$requete = $bdd->prepare("INSERT INTO forum_souscategories (titre_souscat,id_categorie,sousTitre_souscat,place) VALUES(:titre,:cat,:soustitre,:place)");
-				$requete->execute(array('titre'=>$_POST['titre'], 'cat'=>$_POST['categorie'], 'soustitre'=>$_POST['soustitre'], 'place'=>$place)) or die(print_r($requete->errorInfo()));
-				echo'<p class="bon">La sous-catégorie <em>'.$_POST['titre'].' a bien été ajouté !</em></p>';
+				$requete = $bdd->prepare("INSERT INTO forum_souscategories (titre_souscat,id_categorie,sousTitre_souscat,place,id_in) VALUES(:titre,:cat,:soustitre,:place,:id_in)");
+				$requete->execute(array('titre'=>$_POST['titre'], 'cat'=>$_POST['categorie'], 'soustitre'=>$_POST['soustitre'], 'place'=>$place,'id_in'=>-1)) or die(print_r($requete->errorInfo()));
+				echo'<p class="bon">La sous-catégorie <em>'.htmlspecialchars($_POST['titre']).' a bien été ajouté !</em></p>';
 			}
 			
 			/*************** Formulaire ******************
@@ -370,12 +370,12 @@ echo '
 				$texte = "Ajouter";
 				if(isset($_GET['modifierSousCat'])){
 					$requete = $bdd->prepare("SELECT * FROM forum_souscategories WHERE id_souscategorie=:souscat");
-					$requete->execute(array('souscat'=>$_GET['modifierSousCat']));
+					$requete->execute(array('souscat'=>intval($_GET['modifierSousCat'])));
 					$donnees = $requete->fetch();
-					$titre = $donnees['titre_souscat'];
-					$sousTitre = $donnees['sousTitre_souscat'];
+					$titre = htmlspecialchars($donnees['titre_souscat']);
+					$sousTitre = htmlspecialchars($donnees['sousTitre_souscat']);
 					$type= "Modification";
-					$action = "?modifierSousCatOk=".$_GET['modifierSousCat'];
+					$action = "?modifierSousCatOk=".intval($_GET['modifierSousCat']);
 					$texte = "Modifier";
 				}
 			
@@ -401,7 +401,7 @@ echo '
 										   
 										   $requete = $bdd->query("SELECT * FROM forum_categories");
 										   while($donnees = $requete->fetch()){
-											   echo'<option value="'.$donnees['id_categorie'].'">'.$donnees['titre_cat'].'</option>';
+											   echo'<option value="'.$donnees['id_categorie'].'">'.htmlspecialchars($donnees['titre_cat']).'</option>';
 											}
 										   echo'</select></td>';
 									}
@@ -425,13 +425,13 @@ echo '
 				**********************************/
 				
 				$requete = $bdd->prepare("SELECT * FROM forum_categories WHERE id_categorie=:cat");
-				$requete->execute(array('cat'=>$_GET['modifierCat']));
+				$requete->execute(array('cat'=>intval($_GET['modifierCat'])));
 				$reponse = $requete->fetch();
 				$requete->closeCursor();
-				$titre = $reponse['titre_cat']; // affectation du titre
+				$titre = htmlspecialchars($reponse['titre_cat']); // affectation du titre
 				
 				echo '
-					<form id="modifCategorie" method="post" action="structure.php?modifierCatOk='.$_GET['modifierCat'].'">
+					<form id="modifCategorie" method="post" action="structure.php?modifierCatOk='.intval($_GET['modifierCat']).'">
 						<fieldset>
 							<legend>Modification</legend> 
 							
@@ -468,7 +468,7 @@ echo '
 				****************************************************/	
 				
 				$requete = $bdd->prepare("SELECT * FROM forum_souscategories WHERE id_souscategorie=:id");
-				$requete->execute(array('id'=>$_GET['supprimerSousCat']));
+				$requete->execute(array('id'=>intval($_GET['supprimerSousCat'])));
 				$donnees = $requete->fetch();
 				$requete->closeCursor();
 				
@@ -497,11 +497,11 @@ echo '
 				
 				//suppression des réponses !
 				$req = $bdd->prepare("DELETE FROM forum_reponses WHERE id_sujet IN (SELECT id_sujet FROM forum_sujets WHERE id_souscat = :cat )");
-				$req->execute(array('cat'=>$_GET['supprimerSousCat'])) or die(print_r($req->errorInfo()));
+				$req->execute(array('cat'=>intval($_GET['supprimerSousCat']))) or die(print_r($req->errorInfo()));
 				$req->closeCursor();
 				//suppression des sujets
 				$req = $bdd->prepare("DELETE FROM forum_sujets WHERE id_souscat = :cat");
-				$req->execute(array('cat'=>$_GET['supprimerSousCat'])) or die(print_r($req->errorInfo()));
+				$req->execute(array('cat'=>intval($_GET['supprimerSousCat']))) or die(print_r($req->errorInfo()));
 				$req->closeCursor();
 				
 				/************** Requete ****************
@@ -509,7 +509,7 @@ echo '
 				****************************************/
 				
 				$requete = $bdd->prepare("DELETE FROM forum_souscategories WHERE id_souscategorie = :id");
-				$requete->execute(array('id'=>$_GET['supprimerSousCat'])) or die(print_r($requete->errorInfo()));	
+				$requete->execute(array('id'=>intval($_GET['supprimerSousCat']))) or die(print_r($requete->errorInfo()));	
 				$requete->closeCursor();
 			}
 		
@@ -534,7 +534,7 @@ echo '
 			while($categories = $requete->fetch()){
 				echo'<tr>
 					<td class="center_structure">'.$categories['id_categorie'].'</td>
-					<td class="titre_cat">'.$categories['titre_cat'].'</td>
+					<td class="titre_cat">'.htmlspecialchars($categories['titre_cat']).'</td>
 					<td></td>
 					<td class="center_structure"><a class="modifier_cat" href="structure.php?modifierCat='.$categories['id_categorie'].'">Modifier</a> | <a class="supprimer_cat" href="structure.php?supprimerCat='.$categories['id_categorie'].'">Supprimer</a></td>
 				</tr>';
@@ -549,7 +549,7 @@ echo '
 				while($sousCategories = $reponse->fetch()){		
 						echo'<tr>
 							<td class="center_structure">'.$sousCategories['id_souscategorie'].'</td>
-							<td class="titre_souscat">'.$sousCategories['titre_souscat'].'<br>'.$sousCategories['sousTitre_souscat'].'</td>
+							<td class="titre_souscat">'.htmlspecialchars($sousCategories['titre_souscat']).'<br>'.htmlspecialchars($sousCategories['sousTitre_souscat']).'</td>
 							<td class="center_structure"><a href="structure.php?monter='.$sousCategories['id_souscategorie'].'"><img src="images/fleche_haut.png" alt="" title="monter la sous-categorie"></a><br> <a href="structure.php?descendre='.$sousCategories['id_souscategorie'].'"><img src="images/fleche_bas.png" alt="" title="descendre la sous-categorie"></a></td>
 							<td class="center_structure"><a class="modifier_souscat" href="structure.php?modifierSousCat='.$sousCategories['id_souscategorie'].'">Modifier</a> | <a class="supprimer_souscat" href="structure.php?supprimerSousCat='.$sousCategories['id_souscategorie'].'">Supprimer</a></td>
 						</tr>';
@@ -564,21 +564,4 @@ echo'</section>';
 include("includes/bas.php");
 ?>
 
-<script type="text/javascript">
-$(function(){
-	
-	$('.supprimer_souscat').click(function(){
-		if(confirm("Etes vous sur de vouloir supprimer cette sous-catégorie !"))
-			return true;
-		else
-			return false;
-	});
-	
-	$('.supprimer_cat').click(function(){
-		if(confirm("Etes vous sur de vouloir supprimer cette catégorie !"))
-			return true;
-		else
-			return false;
-	});
-});
-</script>
+<script src="JS/structure.js"></script>

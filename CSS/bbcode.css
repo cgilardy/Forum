@@ -1,0 +1,5 @@
+.gras_code {font-weight: bold;}
+.italic_code{font-style:italic;}
+.souligne_code{text-decoration:underline;}
+p.citation_code{border: 1px solid gray; border-radius: 8px; padding: 5px; background-color: #58787a;}
+p.citation_code:hover{background-color: gray;}

@@ -4,7 +4,7 @@ include("includes/config.php");
 $pseudo = $_POST['pseudo'];
 $passe = md5($_POST['passe']);
 
-$requete = $bdd->prepare("SELECT * FROM membres WHERE pseudo = :pseudo and passe = :passe");
+$requete = $bdd->prepare("SELECT * FROM membres JOIN rang ON rang.id_rang = membres.id_rang WHERE pseudo = :pseudo and passe = :passe");
 $requete->execute(array('pseudo'=>$pseudo,'passe'=>$passe));
 $nbRep = $requete->rowCount();
 $reponse = $requete->fetch();
@@ -13,7 +13,7 @@ if($nbRep == 1){
 	$_SESSION['session'] = true;
 	$_SESSION['id'] = $reponse['id_membre'];
 	$_SESSION['pseudo'] = $reponse['pseudo'];
-	$_SESSION['rang'] = $reponse['rang'];
+	$_SESSION['rang'] = $reponse['place_rang'];
 	$_SESSION['avatar'] = $reponse['avatar'];
 	$_SESSION['inventaire'] = $reponse['id_inventaire'];
 	$_SESSION['afficher'] = $reponse['afficherEmail'];

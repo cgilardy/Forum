@@ -32,6 +32,10 @@ echo '
 			<td><input name="photo" type="file" required/></td>
 		</tr>
 		<tr>
+			<td>Signature : </td>
+			<td><textarea id="signature" name="signature" cols="50" rows="5" placeholder="Ce n'est pas obligatoire pour le forum"></textarea></td>
+		</tr>
+		<tr>
 			<td>Description : </td>
 			<td><textarea id="description" name="description" cols="50" rows="5" placeholder="Une description de votre personnage, qui pourra être modifier plus tard dans vos options. (pas obligatoire)"></textarea></td>
 		</tr>

@@ -1,0 +1,72 @@
+#profil
+{
+	border: 1px solid gray;
+	display: inline-block;
+	min-width: 250px;
+	min-height: 230px;
+	float: left;
+	margin: 5px;
+}
+
+#profil h2
+{
+	text-align:center;
+	padding:0;
+	margin:0;
+	margin-bottom: -5px;
+}
+
+#profil hr{height:1px;color:gray;background-color: gray; border:0;}
+
+#profil h2:hover
+{
+	background: black;
+}
+
+.case_profil
+{
+	margin-top:-10px;
+	margin-bottom:-10px;
+	display: inline-block;
+	width:240px;
+	padding:7px;
+}
+
+img.profil_image
+{
+	display: inline-block;
+}
+
+h1.titre_profil
+{
+display:inline-block; vertical-align:top; padding-top:15px; margin-left: 5px;
+}
+
+.case_profil:hover
+{
+	background-color: black;
+}
+
+#profil_info
+{
+	float: left;
+	min-height: 200px;
+	display: inline-block;
+	margin: 5px;
+	border: 1px solid gray;
+}
+
+#profil_info hr{height:1px;color:gray;background-color: gray; border:0;}
+
+#profil_info h2
+{
+	text-align:center;
+	margin:0;
+}
+
+.case_profil_info
+{
+	display: inline-block;
+	padding: 5px;
+	
+}

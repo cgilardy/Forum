@@ -16,4 +16,11 @@ $(function(){
 		else
 			return false;
 	});
+	
+	$('a.sup').click(function(){
+		if(confirm("Voulez vous supprimer le sujet ?"))
+			return true;
+		else
+			return false;
+	});
 });

@@ -42,7 +42,7 @@ echo '
 					********** Par catégories ********/
 					
 					$sujet = $bdd->prepare("SELECT FC.id_categorie FROM forum_sujets FSU LEFT JOIN forum_souscategories FSO ON FSO.id_souscategorie = FSU.id_souscat JOIN forum_categories FC ON FC.id_categorie = FSO.id_categorie WHERE FC.id_categorie=:cat");
-					$sujet->execute(array('cat'=>$categoriesOk['id_categorie'])) or die(print_r($sujet->errorInfo()));
+					$sujet->execute(array('cat'=>intval($categoriesOk['id_categorie']))) or die(print_r($sujet->errorInfo()));
 					$nbSujet = $sujet->rowCount();					
 					
 					/************ Requete ************
@@ -50,7 +50,7 @@ echo '
 					********** Par catégories ********/
 					
 					$reponse = $bdd->prepare("SELECT * FROM forum_reponses FR LEFT JOIN forum_sujets FSU ON FSU.id_sujet = FR.id_sujet LEFT JOIN forum_souscategories FSO ON FSO.id_souscategorie = FSU.id_souscat JOIN forum_categories FC ON FC.id_categorie = FSO.id_categorie WHERE FC.id_categorie=:cat");
-					$reponse->execute(array('cat'=>$categoriesOk['id_categorie'])) or die(print_r($reponse->errorInfo()));	
+					$reponse->execute(array('cat'=>intval($categoriesOk['id_categorie']))) or die(print_r($reponse->errorInfo()));	
 					$nbReponse = $reponse->rowCount();
 					
 					/********** Affichage **************
@@ -58,7 +58,7 @@ echo '
 					**********************************/
 					
 					echo'<tr>
-						<td colspan ="2">'.$categoriesOk['titre_cat'].'</td>
+						<td colspan ="2">'.htmlspecialchars($categoriesOk['titre_cat']).'</td>
 						<td class="text-center">'.$nbSujet.'</td>
 						<td class="text-center">'.$nbReponse.'</td>
 						<td style="border:none;"></td>
@@ -67,7 +67,6 @@ echo '
 					/************** Requete *******************
 					**** Affichage des sous-catégories ! ******
 					*******************************************/
-					
 					$souscat = $bdd->prepare("SELECT * FROM forum_souscategories WHERE id_categorie = :cat ORDER BY place");
 					$souscat->execute(array('cat'=>$categoriesOk['id_categorie']));
 					
@@ -78,13 +77,13 @@ echo '
 							********** Par sous-catégories ********/
 							
 							$dernier = $bdd->prepare("SELECT * FROM forum_sujets FSU JOIN forum_souscategories FSO ON FSO.id_souscategorie = FSU.id_souscat JOIN membres FM ON FM.id_membre = FSU.id_membre WHERE FSO.id_souscategorie = :id ORDER BY date_creation_sujet DESC LIMIT 1");
-							$dernier->execute(array('id'=>$souscatsOk['id_souscategorie'])) or die(print_r($dernier->errorInfo()));
+							$dernier->execute(array('id'=>intval($souscatsOk['id_souscategorie']))) or die(print_r($dernier->errorInfo()));
 							$nbMessage = $dernier->rowCount();
 							$dernierMessage = $dernier->fetch();
 							$timestamp = $dernierMessage['date_creation_sujet'];
 							
 							if($nbMessage > 0)
-								$date = 'Dernier message par '.$dernierMessage['pseudo'].'<br>le '.date('j/m/Y à G:i:s',$timestamp);
+								$date = 'Dernier message par '.htmlspecialchars($dernierMessage['pseudo']).'<br>'.temps($timestamp);
 							else
 								$date = "Aucun message";
 								
@@ -93,7 +92,7 @@ echo '
 							********** Par sous-catégories ********/
 							
 							$sujet_sous = $bdd->prepare("SELECT FSO.id_souscategorie FROM forum_sujets FSU JOIN forum_souscategories FSO ON FSO.id_souscategorie = FSU.id_souscat WHERE FSO.id_souscategorie=:cat");
-							$sujet_sous->execute(array('cat'=>$souscatsOk['id_souscategorie'])) or die(print_r($sujet_sous->errorInfo()));
+							$sujet_sous->execute(array('cat'=>intval($souscatsOk['id_souscategorie']))) or die(print_r($sujet_sous->errorInfo()));
 							$nbSujet_sous = $sujet_sous->rowCount();
 							
 							/*************** Requete **************
@@ -101,7 +100,7 @@ echo '
 							********** Par sous-catégories ********/
 							
 							$reponse_sous = $bdd->prepare("SELECT * FROM forum_reponses FR LEFT JOIN forum_sujets FSU ON FSU.id_sujet = FR.id_sujet LEFT JOIN forum_souscategories FSO ON FSO.id_souscategorie = FSU.id_souscat WHERE FSO.id_souscategorie=:cat");
-							$reponse_sous->execute(array('cat'=>$souscatsOk['id_souscategorie'])) or die(print_r($reponse_sous->errorInfo()));	
+							$reponse_sous->execute(array('cat'=>intval($souscatsOk['id_souscategorie']))) or die(print_r($reponse_sous->errorInfo()));	
 							$nbReponse = $reponse_sous->rowCount();
 
 							/************** Affichage *****************
@@ -109,8 +108,14 @@ echo '
 							*******************************************/
 								
 							echo'<tr>
-								<td colspan ="2"><a class="index_titre" href="voir_sujet.php?id_souscat='.$souscatsOk['id_souscategorie'].'">'.$souscatsOk['titre_souscat'].'</a><br><span class="index_sousTitre">'.$souscatsOk['sousTitre_souscat'].'</span></td>
-								<td class="text-center">'.$nbSujet_sous.'</td>
+								<td colspan ="2"><a class="index_titre" href="voir_sujet.php?id_souscat='.intval($souscatsOk['id_souscategorie']).'">'.htmlspecialchars($souscatsOk['titre_souscat']).'</a><br><span class="index_sousTitre">'.htmlspecialchars($souscatsOk['sousTitre_souscat']).'</span><br>';
+								$chemin = $bdd->prepare("SELECT * FROM forum_petitcat WHERE id_souscat = :id");
+								$chemin->execute(array('id'=>$souscatsOk['id_souscategorie']));
+								while($lieu = $chemin->fetch()){
+									echo '<img src="images/lieu.gif"><a class="lien_index" href="voir_petitsuj.php?id_petit='.$lieu['id_petite'].'">'.$lieu['titre_petite'].'</a>';
+								}
+								echo'</td>';
+								echo'<td class="text-center">'.$nbSujet_sous.'</td>
 								<td class="text-center">'.$nbReponse.'</td>
 								<td class="index_message">'.$date.'</td>
 							</tr>';
@@ -125,7 +130,7 @@ echo '
 				echo'</tbody>
 			</table>
 		';
-		if(isset($_SESSION['rang']) and $_SESSION['rang'] == 1)
+		if(isset($_SESSION['rang']) and $_SESSION['rang'] <= 1)
 			echo'<p class="text_center"><a href="administration.php">Administration</a></p>';
 	echo '</article>';
 

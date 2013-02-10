@@ -95,6 +95,11 @@ td.lus_sujet{width: 7%; text-align:center;}
 th.auteur_sujet{width:15%;text-align:center;}
 td.message_sujet{vertical-align:top;}
 h1.titre_reponse{padding:5px;}
+p.annonce_index{display:inline-block; margin-top:0}
+.annonce_index a {color: #577678;}
+th.index_sujet{width:5%;}
+
+a.lien_index{color:white; text-decoration:underline}
 /****************
 *****************
 *****************

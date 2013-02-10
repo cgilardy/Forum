@@ -1,6 +1,10 @@
 <?php
 include("includes/config.php");
 	if(strlen($_POST['passe']) >= 6 && $_POST['passe'] == $_POST['confirme'] && strlen($_POST['pseudo']) >=4){
+		//on regarde si la signature a été renseigné
+		$signature = null;
+		if(isset($_POST['signature']))
+			$signature = $_POST['signature'];
 		
 		//On vérifie si le pseudo est déjâ possédé
 		$requete = $bdd->prepare("SELECT pseudo FROM membres WHERE pseudo=:pseudo");
@@ -66,8 +70,8 @@ include("includes/config.php");
 	$id_in = $bdd->query("SELECT id_inventaire as id FROM inventaires WHERE id_inventaire = (SELECT MAX(id_inventaire) FROM inventaires)");
 	$reponse1 = $id_in->fetch();
 	
-	$requete = $bdd->prepare("INSERT INTO membres (pseudo,passe,description,id_maison,age,sexe,email,afficherEmail,date_inscription,avatar,rang,id_inventaire) VALUES(:pseudo,:passe,:desc,:maison,:age,:sexe,:email,:affi,CURDATE(),:avatar, :rang,:inventaire)");
-	$requete->execute(array('pseudo'=>$pseudo,'passe'=>$passe, 'desc'=>$description, 'maison'=>$maison, 'age'=>$age, 'sexe'=>$sexe, 'email'=>$email, 'affi'=>0, 'avatar'=>$nom,'rang'=>3,'inventaire'=>$reponse1['id']))or die(print_r($requete->errorInfo()));
+	$requete = $bdd->prepare("INSERT INTO membres (pseudo,passe,description,id_maison,age,sexe,email,afficherEmail,date_inscription,avatar,signature,id_rang,id_inventaire) VALUES(:pseudo,:passe,:desc,:maison,:age,:sexe,:email,:affi,CURDATE(),:avatar,:signature, :rang,:inventaire)");
+	$requete->execute(array('pseudo'=>$pseudo,'passe'=>$passe, 'desc'=>$description, 'maison'=>$maison, 'age'=>$age, 'sexe'=>$sexe, 'email'=>$email, 'affi'=>0, 'avatar'=>$nom,'signature'=>$signature,'rang'=>7,'inventaire'=>$reponse1['id']))or die(print_r($requete->errorInfo()));
 	$requete->closeCursor();
 	header("Location: index.php?inscription=".$pseudo."");
 	}

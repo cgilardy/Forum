@@ -1,0 +1,15 @@
+#liste_membres
+{
+	margin:auto;
+	width: 75%;
+	border: 1px solid gray;
+	border-collapse: collapse;
+}
+
+#liste_membres th, #liste_membres td
+{
+	border: 1px solid gray;
+	padding: 5px;
+}
+
+.age_liste, .action_liste{text-align:center}

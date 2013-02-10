@@ -9,6 +9,9 @@ include("config.php");
 	<link href="CSS/index.css" rel="stylesheet" type="text/css">
 	<link href="CSS/inscription.css" rel="stylesheet" type="text/css">
 	<link href="CSS/connexion.css" rel="stylesheet" type="text/css">
+	<link href="CSS/profil.css" rel="stylesheet" type="text/css">
+	<link href="CSS/liste_membres.css" rel="stylesheet" type="text/css">
+	<link href="CSS/bbcode.css" rel="stylesheet" type="text/css">
 	<link href="CSS/gestion_categorie.css" rel="stylesheet" type="text/css">
 	<link href="CSS/admin.css" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/themes/base/jquery-ui.css">
@@ -26,33 +29,7 @@ include("config.php");
 	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
     <script src="/resources/demos/external/jquery.bgiframe-2.1.2.js"></script>
-	<script type="text/javascript">
-function insertTag(startTag, endTag, textareaId, tagType) {
-var field  = document.getElementById(textareaId); 
-var scroll = field.scrollTop;
-field.focus();
-	
-if (window.ActiveXObject) { // C'est IE
-	var textRange = document.selection.createRange();            
-	var currentSelection = textRange.text;
-			
-	textRange.text = startTag + currentSelection + endTag;
-	textRange.moveStart("character", -endTag.length - currentSelection.length);
-	textRange.moveEnd("character", -endTag.length);
-	textRange.select();     
-} 
-else { // Ce n'est pas IE
-	var startSelection   = field.value.substring(0, field.selectionStart);
-	var currentSelection = field.value.substring(field.selectionStart, field.selectionEnd);
-	var endSelection     = field.value.substring(field.selectionEnd);
-			
-	field.value = startSelection + startTag + currentSelection + endTag + endSelection;
-	field.focus();
-	field.setSelectionRange(startSelection.length + startTag.length, startSelection.length + startTag.length + currentSelection.length);
-} 
-field.scrollTop = scroll; // et on redéfinit le scroll.
-}
-	</script>
+	<script src="JS/bbcode.js"></script>
 </head>
 
 <body>
@@ -84,6 +61,7 @@ field.scrollTop = scroll; // et on redéfinit le scroll.
 				<li><a href="index.php">Acceuil</a></li>
 				<?php
 					if(isset($_SESSION['session']) and $_SESSION['session'] == true){
+						echo '<li><a href="profil.php?id_pseudo='.$_SESSION['id'].'">Profil</a></li>';
 						echo'<li><a href="deconnexion.php">Deconnexion</a></li>';
 					}
 					else{
