@@ -1,5 +1,6 @@
 <?php
 include("includes/config.php");
+
 	if(strlen($_POST['passe']) >= 6 && $_POST['passe'] == $_POST['confirme'] && strlen($_POST['pseudo']) >=4){
 		//on regarde si la signature a été renseigné
 		$signature = null;
@@ -29,7 +30,7 @@ include("includes/config.php");
 	//On continue le traitement
 	$passe = md5($_POST['passe']);
 	$pseudo = $_POST['pseudo'];
-	$age = $_POST['age'];
+	
 	$sexe = $_POST['sexe'];
 	//Traitement de l'image de l'animal
 	$maxsize = 500000;
@@ -69,11 +70,27 @@ include("includes/config.php");
 	/*calcule de l'id de l'inventaire*/
 	$id_in = $bdd->query("SELECT id_inventaire as id FROM inventaires WHERE id_inventaire = (SELECT MAX(id_inventaire) FROM inventaires)");
 	$reponse1 = $id_in->fetch();
+	$age = (int)$_POST['age'];
+	$membre = new Membre(array(
+		'pseudo'=>$pseudo,
+		'passe'=>$passe,
+		'description'=>$description,
+		'idMaison'=>$maison,
+		'age'=>$age,
+		'sexe'=>$sexe,
+		'mail'=>$email,
+		'afficheMail'=>0,
+		'dateInscription' => time(),
+		'avatar'=>$nom,
+		'signature'=>$signature,
+		'idRang'=>7,
+		'inventaire'=>$reponse1['id']
+		));	
+
+	echo $membre->getAge();
+	$membreManager = new MembreManager($bdd);
+	$membreManager->add($membre);
 	
-	$requete = $bdd->prepare("INSERT INTO membres (pseudo,passe,description,id_maison,age,sexe,email,afficherEmail,date_inscription,avatar,signature,id_rang,id_inventaire) VALUES(:pseudo,:passe,:desc,:maison,:age,:sexe,:email,:affi,CURDATE(),:avatar,:signature, :rang,:inventaire)");
-	$requete->execute(array('pseudo'=>$pseudo,'passe'=>$passe, 'desc'=>$description, 'maison'=>$maison, 'age'=>$age, 'sexe'=>$sexe, 'email'=>$email, 'affi'=>0, 'avatar'=>$nom,'signature'=>$signature,'rang'=>7,'inventaire'=>$reponse1['id']))or die(print_r($requete->errorInfo()));
-	$requete->closeCursor();
-	header("Location: index.php?inscription=".$pseudo."");
 	}
 	else
 		header("Location: index.php?inscription=no");
